@@ -25,9 +25,9 @@ void OnStart()
      double Free = AccountFreeMargin();
      double One_Lot=MarketInfo(Symb,MODE_MARGINREQUIRED);// stoimost lota
  //--------------------------------
-     double Lot =MathFloor(Free*Point/One_Lot/Step)*Step;  //Loti
+     double Lot =MathFloor(Free*Prots/One_Lot/Step)*Step;  //Loti
         if(Lot<Min_Lot){
-        Alert("Niechawatajet deneg na ", Min_Lot " lot");
+        Alert("Niechawatajet deneg na ", Min_Lot, " lot");
         break;
         }
 //--------------------
@@ -50,12 +50,34 @@ void OnStart()
       Alert("Otkrit order BUY ", ticket);
       break;
       } 
-// -------------------------------------------------
- int Error=GetLastError();
- 
- 
-     
-     }
-   
+// --------------checked
+    int Error=GetLastError();
+    switch(Error) {
+      case 135:Alert("Price has changed");
+      RefreshRates();
+      continue;
+      case 136:Alert("No prices, waiting for a new tick");
+         while(RefreshRates()==false)
+               Sleep(1);
+               continue;
+      case 146: Alert("Trading subsystem is busy");
+                Sleep(400);
+                RefreshRates();
+                continue;
+    }
+   //------------- unchecked 
+    switch(Error){
+    case 2:Alert("General error");
+           break;
+    case 5:Alert("Old client terminal version");
+           break;
+    case 133:Alert("Trade is prohibited");
+           break;
+    default: Alert(" Error number:",Error);
+    }
+   break;
+   }
+   Alert(" skript zakonczil rabotu -------------------");
+   return;
   }
 //+------------------------------------------------------------------+
