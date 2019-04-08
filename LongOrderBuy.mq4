@@ -13,8 +13,8 @@
 void OnStart()
   {
 //---
- int Dist_SL =10;
- int Dist_TP =3;
+ int Dist_SL =100;
+ int Dist_TP =300;
  double Prots =0.35;
  string Symb=Symbol();
  //------------------------
